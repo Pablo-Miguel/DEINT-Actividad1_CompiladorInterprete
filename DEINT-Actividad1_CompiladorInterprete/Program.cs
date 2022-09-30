@@ -4,44 +4,66 @@
 
 String cadena = "(2+[3-12]*{8/3})";
 
-Console.WriteLine(cadena);
+Console.WriteLine("Cadena a analizar: " + cadena + "\n");
 
-List<Char> lista = new List<Char>();
-Stack<Char> pila = new Stack<Char>();
+Stack<Char> pila = new();
 
-foreach (Char c in cadena) {
-    if (c.Equals("{") || c.Equals("}") || c.Equals("[") || c.Equals("]") || c.Equals("(") || c.Equals(")")) { 
-        lista.Add(c);
-    }
-}
+Console.WriteLine("¿Cadena correcta? -> " + ComprobarCadena());
 
-Console.WriteLine(ComprobarCadena());
+Boolean ComprobarCadena() {
 
-int ComprobarCadena() {
-
-    Char temp;
-
-    for (int i = 0; i < pila.Count; i++)
+    for (int i = 0; i < cadena.Length; i++)
     {
-
-        if (lista[i].Equals('(') || lista[i].Equals('[') || lista[i].Equals('{'))
+        if (cadena[i].Equals('{') || cadena[i].Equals('}') || cadena[i].Equals('[') || cadena[i].Equals(']') || cadena[i].Equals('(') || cadena[i].Equals(')'))
         {
+            if (cadena[i].Equals('(') || cadena[i].Equals('[') || cadena[i].Equals('{'))
+            {
 
-            pila.Push(lista[i]);
+                pila.Push(cadena[i]);
 
-        }
-        else {
-            if (pila.Pop().Equals(obtenerSimboloOpuesto())) { 
-            
+            }
+            else
+            {
+
+                if (pila.Count == 0)
+                {
+                    return false;
+                }
+                else if (pila.Peek().Equals(obtenerSimboloOpuesto(cadena[i])))
+                {
+                    pila.Pop();
+                }
+
             }
         }
 
     }
 
-    return 0;
+    if (pila.Count == 0)
+    {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-char obtenerSimboloOpuesto()
+char obtenerSimboloOpuesto(Char caracter)
 {
-    throw new NotImplementedException();
+    Char tempCaracter = ' ';
+
+    if (caracter.Equals(')'))
+    {
+        tempCaracter = '(';
+    }
+    else if (caracter.Equals(']'))
+    {
+        tempCaracter = '[';
+    }
+    else if (caracter.Equals('}')) {
+        tempCaracter = '{';
+    }
+
+    return tempCaracter;
+
 }
